@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [resultado, setResultado] = useState(null);
+
+  const [itemTexto, setItemTexto] = useState('');
+  const [lista, setLista] = useState([]);
+
+  const somar = () => {
+    const soma = parseFloat(num1) + parseFloat(num2);
+    if (!isNaN(soma)) {
+      setResultado(soma);
+    } else {
+      setResultado('Entrada inválida');
+    }
+  };
+
+  const adicionarItem = () => {
+    if (itemTexto.trim()) {
+      setLista([...lista, { id: Date.now().toString(), texto: itemTexto }]);
+      setItemTexto('');
+    }
+  };
+
+  const removerItem = (id) => {
+    setLista(lista.filter(item => item.id !== id));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Soma de Números</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Número 1"
+        keyboardType="numeric"
+        value={num1}
+        onChangeText={setNum1}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Número 2"
+        keyboardType="numeric"
+        value={num2}
+        onChangeText={setNum2}
+      />
+      <Button title="Somar" onPress={somar} />
+      {resultado !== null && <Text style={styles.resultado}>Resultado: {resultado}</Text>}
+
+      <View style={styles.divisor} />
+
+      <Text style={styles.titulo}>Lista de Itens</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Novo item"
+        value={itemTexto}
+        onChangeText={setItemTexto}
+      />
+      <Button title="Adicionar Item" onPress={adicionarItem} />
+      <FlatList
+        data={lista}
+        keyExtractor={item => item.id}
+        style={styles.lista}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => removerItem(item.id)}>
+            <Text style={styles.item}>{item.texto}</Text>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 50,
+    backgroundColor: '#fff',
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 8,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  resultado: {
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  divisor: {
+    height: 2,
+    backgroundColor: '#eee',
+    marginVertical: 10,
+  },
+  lista: {
+    marginTop: 10,
+  },
+  item: {
+    backgroundColor: '#f0f0f0',
+    padding: 12,
+    marginBottom: 8,
+    borderRadius: 10,
+  },
+});
