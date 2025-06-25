@@ -10,7 +10,7 @@ export default function App() {
   const [lista, setLista] = useState([]);
 
   const somar = () => {
-    const soma = parseFloat(num1) + parseFloat(num2);
+    const soma = parseFloat(num1) + arseFloat(num2);
     if (!isNaN(soma)) {
       setResultado(soma);
     } else {
